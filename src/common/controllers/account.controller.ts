@@ -10,4 +10,10 @@ export class AccountController {
     const response = this.accountService.getAllTransactions(address);
     return response;
   }
+
+  @Get('/balance/:address')
+  async getBalance(@Param('address') address: string) {
+    const response = this.accountService.getBalance(address);
+    return response;
+  }
 }
