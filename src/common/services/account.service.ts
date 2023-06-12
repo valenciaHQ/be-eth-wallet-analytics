@@ -12,7 +12,9 @@ export class AccountService {
   ) {}
 
   getAllTransactions(address: string): Observable<AxiosResponse> {
-    const etherscanApiKey = this.configService.get<string>('apiKey.apiKey');
+    const etherscanApiKey = this.configService.get<string>(
+      'accountService.apiKey',
+    );
 
     return this.httpService
       .get(
@@ -26,18 +28,32 @@ export class AccountService {
       .pipe(map((response) => response.data.result));
   }
 
-  getBalance(address: string): Observable<AxiosResponse> {
-    const etherscanApiKey = this.configService.get<string>('apiKey.apiKey');
+  getBalance(address: string): Observable<string> {
+    const etherscanApiKey = this.configService.get<string>(
+      'accountService.apiKey',
+    );
 
-    return this.httpService
-      .get(
-        `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=lastest&apikey=${etherscanApiKey}`,
-        {
-          headers: {
-            Accept: 'application/json',
+    try {
+      return this.httpService
+        .get(
+          `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${etherscanApiKey}`,
+          {
+            headers: {
+              Accept: 'application/json',
+            },
           },
-        },
-      )
-      .pipe(map((response) => response.data.result));
+        )
+        .pipe(
+          map((response) => {
+            const resultInWEI = response.data.result;
+            const resultInETH = (
+              (resultInWEI as number) / 1000000000000000000
+            ).toFixed(3);
+            return resultInETH;
+          }),
+        );
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
