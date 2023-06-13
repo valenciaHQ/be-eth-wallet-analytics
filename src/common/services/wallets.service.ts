@@ -11,7 +11,7 @@ export class WalletsService {
   ) {}
 
   getAll() {
-    this.walletsModel.find({});
+    return this.walletsModel.find({});
   }
 
   //Create a wallet in database
