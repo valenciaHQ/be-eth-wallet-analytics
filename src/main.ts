@@ -15,7 +15,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors({
-    origin: [process.env.REACT_APP_API_BASE_URL],
+    origin: process.env.REACT_APP_API_BASE_URL,
     methods: ['GET', 'POST'],
     credentials: true,
   });
