@@ -17,7 +17,6 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.REACT_APP_API_BASE_URL,
     methods: ['GET', 'POST'],
-    credentials: true,
   });
   await app.listen(parseInt(process.env.PORT, 10) || 3000);
 }
